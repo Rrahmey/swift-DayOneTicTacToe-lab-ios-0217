@@ -31,6 +31,7 @@ class Board: UIView {
     
     var position: Int!
     var winner: Player!
+    var winningView: UIView!
     
     weak var delegate: BoardDelegate!
     
@@ -49,7 +50,7 @@ class Board: UIView {
         commonInit()
     }
     
-    private func commonInit() {
+    func commonInit() {
         Bundle.main.loadNibNamed("Board", owner: self, options: nil)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentView)
@@ -90,7 +91,7 @@ extension Board {
     func animateTurn(imageView: UIImageView, player: Player) {
         imageView.alpha = 0.0
         imageView.image = player.image
-        UIView.animate(withDuration: 0.3, animations: {
+        UIView.animate(withDuration: 0.1, animations: {
             imageView.alpha = 1.0
         })
     }
@@ -101,11 +102,11 @@ extension Board {
 extension Board {
     
     func win(for player: Player) {
-        let winningView = UIView(frame: frame)
+        winningView = UIView(frame: frame)
         winningView.backgroundColor = UIColor.clear
         winningView.translatesAutoresizingMaskIntoConstraints = false
         insertSubview(winningView, belowSubview: contentView)
-        insertSubview(winningView, aboveSubview: contentView)
+        //insertSubview(winningView, aboveSubview: contentView)
         winningView.constrainEdges(to: self)
         winningView.layer.cornerRadius = 8.0
         winningView.layer.masksToBounds = true
@@ -117,7 +118,18 @@ extension Board {
         imageView.constrainEdges(to: winningView)
         imageView.image = player.image
         
-        UIView.transition(from: contentView, to: winningView, duration: 0.8, options: .transitionFlipFromLeft, completion: nil)
+        UIView.transition(from: contentView, to: winningView, duration: 0.2, options: .transitionFlipFromLeft, completion: nil)
+        
+        
+    }
+    
+    func resetBoardBigWin() {
+        //UIView.transition(from: winningView, to: contentView, duration: 0.2, options: .transitionFlipFromLeft, completion: nil)
+        
+        commonInit()
+        self.winningView.alpha = 0.0
+       // self.winningView.isHidden = true
+
     }
 }
 
